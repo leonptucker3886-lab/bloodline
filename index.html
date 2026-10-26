@@ -1,0 +1,348 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex"><meta name="rating" content="adult">
+<title>BLOODLINE: Crown &amp; Concrete (18+) | LeonLink After Dark</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#0a0807;color:#efe4d2;font-family:Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none}
+button{font:inherit;cursor:pointer}
+.scr{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;overflow-y:auto}
+.on{display:flex!important}
+#gate,#intro,#title,#cut,#end,#cap{background:radial-gradient(ellipse at 50% 30%,#2a1610,#060404 75%)}
+h1{font-size:clamp(30px,9vw,64px);margin:.2em 0;letter-spacing:3px;color:#d9a441;text-shadow:0 0 18px #7a1d10,0 3px 0 #000}
+h2{color:#d9a441;margin:.3em 0}.sub{font-style:italic;color:#c9b493}
+.btn{background:linear-gradient(#5a1c12,#2b0d08);color:#f6e2b5;border:1px solid #d9a441;border-radius:10px;padding:13px 22px;margin:6px;min-width:220px;font-size:17px;box-shadow:0 4px 0 #000}
+.btn:active{transform:translateY(2px)}.btn.sm{min-width:0;padding:8px 11px;font-size:13px;margin:3px}.btn[disabled]{opacity:.4}
+#anchor{font-size:90px;animation:spin 1.2s linear infinite;display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
+#game{position:fixed;inset:0;display:none;flex-direction:column}
+#top{display:flex;flex-wrap:wrap;gap:5px;padding:7px;background:#140d0a;border-bottom:1px solid #5a3a1c;font:13px sans-serif}
+.res{background:#22160f;border:1px solid #4a3020;border-radius:8px;padding:4px 7px}.res b{color:#d9a441}
+#clock{margin-left:auto;display:flex;gap:2px;align-items:center}
+#main{flex:1;display:flex;overflow:hidden}#map{flex:1;position:relative;min-height:0}canvas{width:100%;height:100%;display:block}
+#side{width:340px;max-width:45vw;overflow-y:auto;background:#120c09;border-left:1px solid #4a3020;padding:8px;font:13px sans-serif}
+@media(max-width:700px){#main{flex-direction:column}#side{width:100%;max-width:none;height:46vh;border-left:0;border-top:1px solid #4a3020}}
+.card{background:#1d130d;border:1px solid #4a3020;border-radius:10px;padding:8px;margin-bottom:8px}
+.card h3{margin:0 0 4px;color:#d9a441;font:bold 14px Georgia}
+.bar{height:6px;background:#333;border-radius:3px;overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:#b23a1e}
+.nb{display:flex;justify-content:space-between;align-items:center;padding:5px;border-radius:6px;margin:2px 0;background:#26190f}
+#log{font:12px Georgia;color:#cbb89a;max-height:170px;overflow-y:auto}#log div{border-bottom:1px dotted #3a2618;padding:2px 0}
+#ev{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:20;padding:12px}
+#evb{background:linear-gradient(#2a1a11,#150d09);border:2px solid #d9a441;border-radius:14px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;padding:16px;box-shadow:0 0 40px #000;animation:pop .25s}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+#evb h2{font-size:21px}#evt{font-size:16px;line-height:1.5;margin:8px 0 10px}
+#evb .btn{display:block;width:100%;margin:6px 0;text-align:left;font-size:15px;min-width:0}
+#evtimer{height:5px;background:#d9a441;border-radius:3px}
+.tag{font:11px sans-serif;color:#9a8466}
+#toast{position:fixed;top:56px;left:50%;transform:translateX(-50%);background:#5a1c12;border:1px solid #d9a441;border-radius:8px;padding:8px 14px;font:14px sans-serif;z-index:30;display:none;max-width:90vw}
+#cutt{max-width:640px;font-size:19px;line-height:1.6;min-height:40vh;white-space:pre-line}
+input,select{font:16px Georgia;padding:6px;margin:4px;background:#1d130d;color:#efe4d2;border:1px solid #d9a441;border-radius:6px}
+.row{display:flex;flex-wrap:wrap;justify-content:center;gap:2px}
+</style></head><body>
+<div id="gate" class="scr on"><h1>18+</h1><p style="max-width:520px">BLOODLINE contains strong language, violence, betrayal, adult themes and implied sex (fade to black). All characters are adults. Are you 18 or older?</p>
+<button class="btn" onclick="AU.init();go('intro');intro()">I am 18+, enter</button><button class="btn" onclick="location.href='https://www.google.com'">Leave</button></div>
+<div id="intro" class="scr" onclick="introSkip()"><div id="introc"></div></div>
+<div id="title" class="scr"><div class="sub">LeonLink After Dark presents</div><h1>BLOODLINE</h1><h2>Crown &amp; Concrete</h2>
+<p class="sub" style="max-width:520px">The country fell apart. The old families didn't. Rule your house for one hour of real time. Keep the blood going, or watch it dry up.</p>
+<button class="btn" onclick="newRun(false)">New Dynasty (random)</button>
+<button class="btn" onclick="newRun(true)">Steward Mode (assisted)</button>
+<button class="btn" onclick="openCap()">Create-a-Player 🔒</button>
+<div class="tag" id="tokTag"></div></div>
+<div id="cap" class="scr"><div id="capc"></div></div>
+<div id="cut" class="scr" onclick="cutNext()"><div id="cutt"></div><div class="tag">tap to continue</div><button class="btn sm" style="position:fixed;top:12px;right:12px" onclick="event.stopPropagation();cutEnd()">SKIP</button></div>
+<div id="game"><div id="top">
+<span class="res">💰 <b id="rGold"></b></span><span class="res">⚔️ <b id="rTroops"></b></span><span class="res">👑 <b id="rPres"></b></span><span class="res">⚖️ <b id="rStab"></b></span><span class="res">🔥 <b id="rPress"></b></span>
+<span id="clock"><span class="res"><b id="rYear"></b></span><button class="btn sm" id="bPause" onclick="togglePause()">⏸</button><button class="btn sm" id="bSpd" onclick="toggleSpeed()">1x</button></span></div>
+<div id="main"><div id="map"><canvas id="cv"></canvas></div><div id="side">
+<div class="card" id="ruler"></div>
+<div class="card"><h3>Orders</h3><div class="row">
+<button class="btn sm" onclick="act('tax')">Squeeze taxes</button><button class="btn sm" onclick="act('levy')">Raise troops (60💰)</button>
+<button class="btn sm" onclick="act('feast')">Throw a feast (80💰)</button><button class="btn sm" onclick="act('scheme')">Run a scheme (50💰)</button></div></div>
+<div class="card"><h3>Neighbors</h3><div id="nbr"></div></div>
+<div class="card"><h3>Chronicle</h3><div id="log"></div></div></div></div></div>
+<div id="ev"><div id="evb"><div class="tag" id="evk"></div><h2 id="evh"></h2><div id="evtimer"></div><div id="evt"></div><div id="evo"></div></div></div>
+<div id="end" class="scr"><h1 id="endh"></h1><div id="endt" style="max-width:600px;font-size:18px;line-height:1.5"></div><div id="ends" class="tag" style="margin:12px;font-size:14px"></div><button class="btn" onclick="go('title');refreshTitle()">Back to title</button></div>
+<div id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;const pick=a=>a[R(0,a.length-1)];const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+function go(id){document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));$('game').style.display='none';if(id==='game')$('game').style.display='flex';else $(id).classList.add('on');}
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2800);}
+const STORE='bloodline_v1';let SAVE=JSON.parse(localStorage.getItem(STORE)||'{"glow":0,"cap":false,"best":0,"runs":0,"endings":[]}');
+function persist(){localStorage.setItem(STORE,JSON.stringify(SAVE));}
+const AU={c:null,m:null,init(){if(this.c)return;try{this.c=new(window.AudioContext||window.webkitAudioContext)();const k=this.c.createDynamicsCompressor();k.connect(this.c.destination);this.m=this.c.createGain();this.m.gain.value=.5;this.m.connect(k);}catch(e){}},
+tone(f,d,type,v,t0,sl){if(!this.c)return;type=type||'sine';v=v||.2;const t=this.c.currentTime+(t0||0),o=this.c.createOscillator(),g=this.c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(sl)o.frequency.exponentialRampToValueAtTime(sl,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(this.m);o.start(t);o.stop(t+d+.05);},
+noise(d,v,f){if(!this.c)return;const b=this.c.createBuffer(1,this.c.sampleRate*d,this.c.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);const s=this.c.createBufferSource(),fl=this.c.createBiquadFilter(),g=this.c.createGain();fl.frequency.value=f||800;g.gain.value=v||.2;s.buffer=b;s.connect(fl);fl.connect(g);g.connect(this.m);s.start();},
+drum(){this.tone(90,.4,'sine',.5,0,40);this.noise(.15,.15,400);},
+bell(){[523,659,784].forEach((f,i)=>this.tone(f,1.2,'triangle',.12,i*.08));},
+doom(){this.tone(110,1.6,'sawtooth',.15,0,55);this.tone(82,1.8,'sine',.3);this.drum();},
+sword(){this.noise(.25,.25,3000);this.tone(1200,.2,'square',.05,0,300);},
+coin(){this.tone(1320,.12,'square',.08);this.tone(1760,.2,'square',.06,.07);},
+on:false,mt:null,music(){if(!this.c||this.on)return;this.on=true;let s=0;const bs=[55,55,65.4,49];this.mt=setInterval(()=>{if(!S||S.paused||S.over)return;const b=bs[(s>>3)%4]*(S.press>60?1.06:1);if(s%4===0)this.tone(b,.9,'sawtooth',.05);if(s%8===0)this.drum();if(s%8===4)this.noise(.08,.05,1500);if(s%16===10)this.tone(b*4,.6,'triangle',.035);s++;},S&&S.press>60?200:260);},
+stop(){clearInterval(this.mt);this.on=false;}};
+let introT=[];function intro(){const c=$('introc');const st=[[0,'<div style="font:bold 28px sans-serif;letter-spacing:6px">LEONLINK</div>'],[1400,'<div class="sub" style="font-size:22px">LEONLINK PRESENTS...</div>'],[2800,'<div id="anchor">⚓</div>'],[7800,'<h1 style="font-family:sans-serif">ARCADELINE</h1><div style="font:bold 20px sans-serif;letter-spacing:8px;color:#b23a1e">EPIC · AFTER DARK</div>'],[9600,'<h1>BLOODLINE</h1><h2>Crown &amp; Concrete</h2>']];
+st.forEach(([t,h],i)=>introT.push(setTimeout(()=>{c.innerHTML=h;if(i===2)AU.tone(220,4.5,'sine',.08,0,440);if(i>=3)AU.doom();},t)));introT.push(setTimeout(introSkip,11800));}
+function introSkip(){introT.forEach(clearTimeout);introT=[];go('title');refreshTitle();}
+function refreshTitle(){$('tokTag').innerHTML=`✨ Glow Tokens: <b>${SAVE.glow}</b> · Runs: ${SAVE.runs} · Best legacy: ${SAVE.best} · Endings found: ${SAVE.endings.length}/12<br>Create-a-Player: ${SAVE.cap?'UNLOCKED':'500 Glow Tokens (≈ $4.99 value, earned in play)'}`;}
+// ===== TRAITS: original LeonLink set. stats: mar=War dip=Charm cun=Cunning stw=Ledger hp=Health
+const TR={
+ironNerve:{n:'Iron-Nerved',k:'nature',d:'Never flinches.',s:{mar:2,hp:1},x:'skittish'},
+skittish:{n:'Skittish',k:'nature',d:'Jumps at shadows.',s:{mar:-2,cun:1},x:'ironNerve'},
+silver:{n:'Silver-Tongued',k:'nature',d:'Could sell rain to a flood.',s:{dip:3}},
+snake:{n:'Snake-Blooded',k:'nature',d:'Smiles while counting knives.',s:{cun:3,dip:-1}},
+openHand:{n:'Open-Handed',k:'nature',d:'Gives freely. Loved for it.',s:{dip:2,stw:-1},x:'tightFist'},
+tightFist:{n:'Tightfisted',k:'nature',d:'Squeezes every coin till it screams.',s:{stw:3,dip:-1},x:'openHand'},
+fuse:{n:'Short-Fused',k:'nature',d:'Swings first, apologises never.',s:{mar:2,dip:-2},x:'ice'},
+ice:{n:'Ice-Veined',k:'nature',d:'Calm as a closed grave.',s:{cun:2,stw:1},x:'fuse'},
+candle:{n:'Candle-Keeper',k:'nature',d:'Prays at every shrine left standing.',s:{dip:1,stw:1},x:'godless'},
+godless:{n:'Godless',k:'nature',d:'Believes in leverage, not heaven.',s:{cun:2,dip:-1},x:'candle'},
+bottle:{n:'Bottle-Sworn',k:'nature',d:'Drinks like the bottle owes money.',s:{dip:1,hp:-2,stw:-1}},
+door:{n:'Door-Watcher',k:'nature',d:'Sleeps facing the door. Plots against you fail more.',s:{cun:2,dip:-1}},
+knuckle:{n:'Knuckle-Hard',k:'nature',d:'Ruthless. Fear is currency.',s:{mar:2,cun:1,dip:-2}},
+restless:{n:'Restless Heart',k:'nature',d:'Too many lovers, too many secrets.',s:{dip:2,cun:-1},x:'locked'},
+locked:{n:'Locked Heart',k:'nature',d:'Loyal to one. Rumours slide off.',s:{stw:1,cun:1},x:'restless'},
+camera:{n:'Camera-Loved',k:'nature',d:'The feeds adore this face.',s:{dip:3}},
+offGrid:{n:'Off-Grid',k:'nature',d:'No phone, no trail, no mercy.',s:{cun:3,dip:-2}},
+ink:{n:'Ink-Stained',k:'nature',d:'Reads everything. Forgets nothing.',s:{stw:2,cun:1,mar:-1}},
+ox:{n:'Ox-Built',k:'born',d:'Built like a loading dock.',s:{mar:3,hp:2},inh:.5,x:'glass'},
+glass:{n:'Glass-Boned',k:'born',d:'Sickly since the cradle.',s:{hp:-3,mar:-1},inh:.4,x:'ox'},
+quick:{n:'Quick-Lit',k:'born',d:'Sharp as a fresh razor.',s:{cun:2,stw:2,dip:1},inh:.45,x:'dim'},
+dim:{n:'Dim-Lit',k:'born',d:'The lights are on. Mostly.',s:{cun:-2,stw:-2},inh:.4,x:'quick'},
+striking:{n:'Striking',k:'born',d:'Turns heads in any room.',s:{dip:2},inh:.4},
+longBlood:{n:'Long-Blooded',k:'born',d:'The family ages slow.',s:{hp:3},inh:.55},
+bladeKiss:{n:'Blade-Kissed',k:'scar',d:'Survived a knife that should have killed.',s:{mar:1,dip:-1}},
+redHand:{n:'Red-Handed',k:'scar',d:'Killed blood kin. Everyone knows.',s:{cun:1,dip:-3}},
+legend:{n:'Street Legend',k:'scar',d:'They sing about this one in the bars.',s:{mar:2,dip:2}},
+limp:{n:'Limping',k:'scar',d:'An old wound that never healed right.',s:{mar:-2,hp:-1}},
+haunted:{n:'Haunted',k:'scar',d:'Hears the dead at 3am.',s:{cun:1,hp:-1,dip:-1}},
+oathbreak:{n:'Oath-Breaker',k:'scar',d:'Their word is worth less than wet paper.',s:{dip:-3}}
+};
+const NAT=Object.keys(TR).filter(k=>TR[k].k==='nature'),BORN=Object.keys(TR).filter(k=>TR[k].k==='born');
+function hasT(p,t){return p&&p.traits.includes(t);}
+function addT(p,t){if(!p||hasT(p,t))return false;const x=TR[t].x;if(x&&hasT(p,x))p.traits=p.traits.filter(q=>q!==x);p.traits.push(t);return true;}
+function stat(p,s){let v=p.base[s];p.traits.forEach(t=>{v+=(TR[t].s[s]||0)});if(s!=='hp'&&p.age<16)v=Math.floor(v*p.age/16);return v;}
+const FN=['Dante','Mara','Vik','Sasha','Rourke','Ines','Cass','Juno','Bram','Lena','Teo','Nadia','Kole','Ivy','Marek','Rosa','Silas','Petra','Remy','Odile','Hale','Zora','Luca','Wren','Anton','Calla','Dex','Vera'];
+function rollP(age,parent1,parent2,fixed){const p={name:fixed&&fixed.name||pick(FN),age:age,base:{mar:R(2,9),dip:R(2,9),cun:R(2,9),stw:R(2,9),hp:R(4,9)},traits:[],alive:true,id:Math.random()};
+ if(fixed){if(fixed.day)p.day=fixed.day;p.base=Object.assign(p.base,fixed.base);(fixed.traits||[]).forEach(t=>addT(p,t));return p;}
+ [parent1,parent2].forEach(par=>{if(par)par.traits.forEach(t=>{if(TR[t].k==='born'&&Math.random()<TR[t].inh)addT(p,t);});});
+ if(!parent1&&Math.random()<.5)addT(p,pick(BORN));
+ const n=R(2,3);for(let i=0;i<n;i++)addT(p,pick(NAT));
+ if(parent1&&Math.random()<.35){const pt=parent1.traits.filter(t=>TR[t].k==='nature');if(pt.length)addT(p,pick(pt));}
+ return p;}
+function tlist(p){return p.traits.map(t=>`<span title="${TR[t].d}" style="display:inline-block;background:${TR[t].k==='scar'?'#4a1a12':TR[t].k==='born'?'#1f2a3a':'#2e2414'};border-radius:5px;padding:1px 5px;margin:1px;font-size:11px">${TR[t].n}</span>`).join('');}
+// ===== STATE =====
+const YEAR_SEC=45,END_YEAR=80;let S=null,lastT=0,raf=0;
+const HOUSES=[{n:'House Varga',c:'#3d6fb0',sig:'🐺',seat:'the Docklands'},{n:'House Okonkwo-Reyes',c:'#3f8f4f',sig:'🦅',seat:'the Glass Towers'},{n:'House Castellane',c:'#8a4fa8',sig:'🐍',seat:'Old Cathedral Ward'},{n:'House Brandt',c:'#b07d2a',sig:'🐻',seat:'the Rail Yards'}];
+const YOU={n:'House Ashgrave',c:'#b23a1e',sig:'🔥'};
+function newRun(steward,custom){AU.init();const run={steward:steward,year:0,t:0,sp:1,paused:false,over:false,gold:150,troops:50,pres:10,stab:60,press:0,ignored:0,clues:{},accuse:0,
+ ruler:rollP(R(22,30),null,null,custom),spouse:null,kids:[],dead:[],gen:1,evQ:[],cur:null,nextEv:8,log:[],tiles:[],nb:[],war:null,act:0,flags:{},plotT:0};
+ run.ruler.name=custom&&custom.name||run.ruler.name;
+ // neighbors: shown warmth vs hidden intent. The Knife is secret and often the friendliest face.
+ const knife=R(0,3);run.nb=HOUSES.map((h,i)=>({...h,i:i,op:i===knife?R(25,45):R(-20,30),grudge:0,troops:R(25,42),gold:100,alive:true,knife:i===knife,ruler:rollP(R(25,55)),allied:false,married:false}));
+ run.knife=knife;
+ // tiles 6x5 grid
+ for(let y=0;y<5;y++)for(let x=0;x<6;x++)run.tiles.push({x:x,y:y,o:-1});
+ const seats=[[0,0],[5,0],[0,4],[5,4]];run.tiles.forEach(t=>{let best=-1,bd=99;seats.forEach((s,i)=>{const d=Math.abs(s[0]-t.x)+Math.abs(s[1]-t.y);if(d<bd){bd=d;best=i;}});t.o=best;});
+ [[2,2],[3,2]].forEach(([x,y])=>run.tiles.find(t=>t.x===x&&t.y===y).o=9);[[2,1],[3,3]].forEach(([x,y])=>run.tiles.find(t=>t.x===x&&t.y===y).o=-2);
+ S=run;SAVE.runs++;persist();
+ playCut(PROLOGUE(),()=>{go('game');resize();lastT=performance.now();AU.music();log(`Year 1. ${S.ruler.name} of ${YOU.n} takes the seat at age ${S.ruler.age}.`);objToast();ui();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);});}
+function myTiles(){return S.tiles.filter(t=>t.o===9).length;}
+function nbTiles(i){return S.tiles.filter(t=>t.o===i).length;}
+function log(t){S.log.unshift(`<b>Y${S.year+1}</b> ${t}`);if(S.log.length>60)S.log.pop();}
+// ===== OBJECTIVES (clear goals; enemy identity hidden) =====
+const ACTS=[{y:0,n:'Act I · Hold the Block',goals:['Bank 300 gold','Marry someone useful','Have an heir']},
+ {y:15,n:'Act II · Take the City',goals:['Own 4 districts','Reach 60 prestige','Keep stability above 30']},
+ {y:35,n:'Act III · The Long Knives',goals:['Someone is planning to end your line. Find out who','Gather 3 clues, then accuse the right house','Keep an adult heir alive']},
+ {y:60,n:'Act IV · Legacy',goals:['Survive to Year 80','Or take every district and crown yourself','Leave the strongest heir you can']}];
+function goalDone(a,g){const r=S;if(a===0)return[r.gold>=300||r.flags.bank,!!r.spouse,r.kids.some(k=>k.alive)][g];if(a===1)return[myTiles()>=4,r.pres>=60,r.stab>30][g];if(a===2)return[!!r.flags.knifeFound,!!r.flags.knifeFound,r.kids.some(k=>k.alive&&k.age>=16)][g];return[r.year>=END_YEAR,myTiles()>=26,r.kids.some(k=>k.alive)][g];}
+function objToast(){toast('📜 '+ACTS[S.act].n+': '+ACTS[S.act].goals.join(' · '));}
+// ===== LOOP =====
+function loop(now){const dt=Math.min(.1,(now-lastT)/1000);lastT=now;if(!S||S.over)return;
+ if(!S.paused&&!S.cur){const d=dt*S.sp;S.t+=d;S.nextEv-=d;tickWar(d);
+  if(S.t>=YEAR_SEC){S.t-=YEAR_SEC;yearTick();}
+  if(S.nextEv<=0){spawnEvent();S.nextEv=Math.max(9,32-S.press*.22-S.year*.08)+R(0,8);}}
+ if(S.cur&&!S.paused){S.cur.left-=dt;$('evtimer').style.width=cl(S.cur.left/S.cur.max*100,0,100)+'%';if(S.cur.left<=0)ignoreEvent();}
+ draw();if(Math.random()<.2)ui();raf=requestAnimationFrame(loop);}
+function togglePause(){S.paused=!S.paused;$('bPause').textContent=S.paused?'▶':'⏸';}
+function toggleSpeed(){S.sp=S.sp===1?2:S.sp===2?3:1;$('bSpd').textContent=S.sp+'x';}
+// ===== YEAR TICK =====
+function yearTick(){const r=S.ruler;S.year++;
+ const inc=Math.round(myTiles()*12+stat(r,'stw')*3-S.troops*.4);S.gold+=inc;S.pres+=Math.max(0,Math.round(myTiles()/3))+(hasT(r,'camera')?1:0);
+ S.stab=cl(S.stab+(S.stab<50?1:0)-(S.press>70?2:0)+(hasT(r,'knuckle')?-1:0),0,100);
+ // pressure creeps up with time, grudges, ignored events
+ const grud=S.nb.filter(n=>n.alive).reduce((a,n)=>a+Math.max(0,n.grudge),0);S.press=cl(Math.round(S.year*.45+S.ignored*4+grud*.35+(S.war?6:0)),0,100);
+ [r,S.spouse,...S.kids].forEach(p=>{if(p&&p.alive)p.age++;});S.nb.forEach(n=>{n.ruler.age++;n.troops+=R(1,4);n.grudge=Math.max(0,n.grudge-1);if(n.ruler.age>R(60,85)){n.ruler=rollP(R(20,35));log(`${n.n} buries its head. A new ruler, ${n.ruler.name}, takes over.`);}});
+ // births
+ if(S.spouse&&S.spouse.alive&&r.age<55&&S.kids.length<6&&Math.random()<(.28+(hasT(r,'restless')?.1:0))){const k=rollP(0,r,S.spouse);S.kids.push(k);log(`A child is born: ${k.name}. ${k.traits.length?'They show signs of being '+k.traits.map(t=>TR[t].n).join(', ')+'.':''}`);AU.bell();}
+ // child coming of age may gain traits
+ S.kids.forEach(k=>{if(k.alive&&k.age===16){addT(k,pick(NAT));log(`${k.name} comes of age: ${k.traits.map(t=>TR[t].n).join(', ')}.`);}});
+ // death checks
+ const risk=p=>{const hp=stat(p,'hp');return p.age<45?.004:Math.max(.005,(p.age-45)*.006-hp*.003)+(hasT(p,'bottle')?.02:0);};
+ S.kids.forEach(k=>{if(k.alive&&Math.random()<(k.age<5?.02:.004)){k.alive=false;log(`💀 ${k.name} dies of fever at ${k.age}. The house goes quiet.`);S.stab-=4;}});
+ if(S.spouse&&S.spouse.alive&&Math.random()<risk(S.spouse)){S.spouse.alive=false;log(`💀 Your spouse ${S.spouse.name} dies.`);S.flags.widow=1;}
+ if((S.year>8||r.age>45)&&Math.random()<risk(r)){die('natural causes');if(S.over)return;}
+ // the Knife schemes in secret; others plot when grudges run hot
+ S.nb.forEach(n=>{if(!n.alive)return;const heat=n.knife?(S.year>20?.10+S.press*.002:.02):(n.grudge>30?.08:0);if(Math.random()<heat)queuePlot(n);
+  if(!n.knife&&!S.war&&n.grudge>45&&Math.random()<.25&&S.year>12)aiWar(n);if(n.knife&&!S.war&&S.year>45&&!S.flags.knifeFound&&Math.random()<.06)aiWar(n);});
+ // acts
+ const na=ACTS.findIndex((a,i)=>i===ACTS.length-1||ACTS[i+1].y>S.year);if(na!==S.act){S.act=na;playCut(ACT_CUT[na](),()=>{go('game');objToast();});}
+ if(S.gold<-150){end('coup');return;}if(S.stab<=0){end('revolt');return;}if(myTiles()===0){end('conquered');return;}
+ if(myTiles()>=26){end('crown');return;}if(S.year>=END_YEAR){end('legacy');return;}
+ if(r.age>=16&&S.year%5===0)S.pres+=1;ui();}
+function die(cause){const r=S.ruler;r.alive=false;S.dead.push(r);log(`⚰️ ${r.name} dies (${cause}) at ${r.age}.`);AU.doom();
+ const heirs=S.kids.filter(k=>k.alive).sort((a,b)=>b.age-a.age);if(!heirs.length){end(cause==='poison'?'poison':cause==='knife'?'knife':'extinct');return;}
+ const h=heirs[0];S.ruler=h;S.kids=S.kids.filter(k=>k!==h);S.gen++;S.spouse=null;S.stab=cl(S.stab-(h.age<16?20:8),0,100);
+ if(h.age<16)log(`👶 ${h.name}, only ${h.age}, inherits. A regent council takes over. Everyone is circling.`);else log(`👑 ${h.name} (${h.age}) inherits ${YOU.n}. Generation ${S.gen}.`);
+ // sibling rivalry
+ const sib=S.kids.filter(k=>k.alive&&k.age>=16);if(sib.length&&S.stab<35&&Math.random()<.5)S.evQ.unshift(EV_BROTHERS(sib[0]));
+ if(S.stab<=0)end('revolt');}
+// ===== ACTIONS =====
+function act(a){if(S.over)return;const r=S.ruler;
+ if(a==='tax'){const g=20+stat(r,'stw')*4;S.gold+=g;S.stab-=hasT(r,'tightFist')?3:6;toast(`+${g} gold. The streets grumble.`);AU.coin();}
+ if(a==='levy'){if(S.gold<60)return toast('Not enough gold.');S.gold-=60;const t=12+stat(r,'mar');S.troops+=t;toast(`+${t} troops sign on.`);AU.drum();}
+ if(a==='feast'){if(S.gold<80)return toast('Not enough gold.');S.gold-=80;S.stab=cl(S.stab+8,0,100);S.pres+=3;S.nb.forEach(n=>n.op+=4);toast('A feast. Wine flows, debts are forgotten for a night.');AU.bell();if(Math.random()<.18)S.evQ.unshift(EV_FEAST_POISON());}
+ if(a==='scheme'){if(S.gold<50)return toast('Not enough gold.');S.gold-=50;scheme();}
+ ui();}
+function scheme(){const r=S.ruler;const alive=S.nb.filter(n=>n.alive);const n=pick(alive);const roll=R(1,20)+stat(r,'cun');
+ if(roll>=14){if(n.knife){S.clues[n.i]=(S.clues[n.i]||0)+1;log(`🕵️ Your spy in ${n.n} finds burner phones, coded ledgers, and your family's daily schedule. (Clue)`);toast('A real clue. Someone is watching you.');}
+  else{const fake=Math.random()<.3;if(fake){const k=S.nb[S.knife];S.clues[n.i]=(S.clues[n.i]||0)+1;log(`🕵️ Papers in ${n.n} point to them... but they smell planted.`);}else log(`🕵️ ${n.n} is clean. Petty debts, a mistress, nothing aimed at you.`);}}
+ else if(roll>=8)log('🕵️ Your spy comes back with nothing but a bar tab.');else{n.grudge+=15;n.op-=15;log(`🕵️ Your spy is caught by ${n.n}. They are furious.`);toast(`Caught! ${n.n} won't forget this.`);}
+ }
+function accuse(i){const n=S.nb[i];if(S.flags.knifeFound)return;
+ if(n.knife){S.flags.knifeFound=1;S.pres+=25;S.stab+=10;n.op=-100;n.grudge=80;log(`⚖️ You expose ${n.n}. The smiling neighbor was the knife all along.`);playCut(REVEAL(n),()=>{go('game');});S.glowBonus=(S.glowBonus||0)+60;}
+ else{S.accuse++;n.op-=40;n.grudge+=40;S.pres-=15;S.stab-=10;log(`⚖️ You accuse ${n.n}... and you're wrong. They will remember. The real enemy laughs.`);toast('Wrong house. That hurt you badly.');if(S.accuse>=2){end('exile');}}
+ ui();}
+// ===== WAR =====
+function declareWar(i){const n=S.nb[i];if(S.war)return toast('Already at war.');if(n.allied){S.ruler.traits.includes('oathbreak')||addT(S.ruler,'oathbreak');n.allied=false;S.pres-=10;log('You break an alliance. Your word now means nothing.');}
+ S.war={i:i,p:50,att:true};n.grudge+=30;n.op-=30;S.nb.forEach(o=>{if(o!==n)o.op-=5;});log(`⚔️ You declare war on ${n.n}.`);AU.sword();ui();}
+function aiWar(n){S.war={i:n.i,p:50,att:false};log(`⚔️ ${n.n} marches on you!`);toast(`${n.sig} ${n.n} has declared war!`);AU.doom();}
+function tickWar(d){const w=S.war;if(!w)return;const n=S.nb[w.i];const me=S.troops*(1+stat(S.ruler,'mar')*.06)*(w.att?1:1.3)*(S.year<20?1.2:1),them=n.troops*(1+stat(n.ruler,'mar')*.05);
+ w.p+=d*(me/(me+them)-.5)*6+(Math.random()-.5)*d*3;S.troops=Math.max(0,S.troops-d*.15);n.troops=Math.max(0,n.troops-d*.15);
+ if(w.p>=100){const t=S.tiles.find(t=>t.o===w.i)||S.tiles.find(t=>t.o===-2);if(t)t.o=9;S.pres+=12;S.gold+=60;log(`🏴 Victory over ${n.n}! You take a district.`);AU.bell();if(Math.random()<.25)addT(S.ruler,'legend');if(nbTiles(w.i)===0){n.alive=false;log(`${n.n} is wiped off the map.`);}S.war=null;}
+ else if(w.p<=0){const t=S.tiles.find(t=>t.o===9);if(t&&(myTiles()>1||S.year>25))t.o=w.i;S.troops+=10;S.pres-=10;S.stab-=8;log(`🩸 Defeat. ${n.n} takes one of your districts.`);if(Math.random()<.2)addT(S.ruler,pick(['limp','bladeKiss']));S.war=null;}}
+// ===== EVENTS =====
+function chk(s,dc){const v=R(1,20)+stat(S.ruler,s);return v>=dc;}
+function rn(){const a=S.nb.filter(n=>n.alive);return pick(a.length?a:S.nb);}
+function showEv(e){S.cur=e;e.max=e.left=(e.major?28:20)*(S.steward?1.4:1);$('evk').textContent=(e.k||'EVENT')+(e.major?' · MAJOR':'')+' · ignoring it makes things worse';$('evh').textContent=e.h;$('evt').innerHTML=e.t;$('evo').innerHTML='';
+ e.o.forEach((o,i)=>{if(o.req&&!o.req())return;const b=document.createElement('button');b.className='btn';b.innerHTML=o.l;b.onclick=()=>choose(i);$('evo').appendChild(b);});$('ev').style.display='flex';AU.bell();
+ if(S.steward&&!e.major){setTimeout(()=>{if(S.cur===e){toast('🧑‍💼 Your steward handled it: '+e.o[e.safe||0].l.replace(/<[^>]+>/g,''));choose(e.safe||0);}},2500);}}
+function choose(i){const e=S.cur;if(!e)return;S.cur=null;$('ev').style.display='none';const msg=e.o[i].f();if(msg)log(msg);ui();}
+function ignoreEvent(){const e=S.cur;S.cur=null;$('ev').style.display='none';S.ignored++;const w=e.ig?e.ig():e.o[e.o.length-1].f();log('⌛ Ignored: '+e.h+'. '+(w||''));toast('You ignored it. Pressure rises.');ui();}
+function spawnEvent(){if(S.over)return;if(S.evQ.length){showEv(S.evQ.shift());return;}let pool=EVENTS.filter(e=>(!e.min||S.year>=e.min)&&(!e.cond||e.cond()));const sev=S.press>55?pool.filter(e=>e.hard):[];showEv(mk(pick(sev.length&&Math.random()<.5?sev:pool)));}
+function mk(t){return t.make();}
+function queuePlot(n){const k=n.knife;S.evQ.push({k:'PLOT',major:true,h:pick(['A knife in the dark','Something in the wine','The car won\'t start','A stranger on the stairs']),
+ t:`Your guards catch a ${pick(['courier','waiter','driver','"electrician"'])} with a ${pick(['blade taped to his calf','vial in his collar','pipe bomb in a gift box','pistol with the serial filed off'])}. He's sweating and won't talk. ${k&&S.year>30?'He keeps glancing at the gift your <i>friendly</i> neighbor sent last week.':''}`,
+ o:[{l:`🔪 Make him talk (Cunning)`,f:()=>{if(chk('cun',13+S.year/10)){S.clues[n.i]=(S.clues[n.i]||0)+(k?1:0);return k?`He cracks. Paid in ${n.sig} coin. (Clue against ${n.n})`:`He names ${n.n}. A petty grudge, nothing bigger.`;}addT(S.ruler,'haunted');return'He bites down on something and dies foaming. Nothing learned.';}},
+ {l:'🛡️ Double the guard (40💰)',f:()=>{S.gold-=40;return'Locks changed, guards doubled. For now.';}},
+ {l:'Let it go, it was nothing',f:()=>plotHits(n)}],ig:()=>plotHits(n)});}
+function plotHits(n){const r=S.ruler;const guard=hasT(r,'door')?.45:0;if(Math.random()<guard)return'Your paranoia saves you. The killer is stopped at the door.';
+ const roll=R(1,10);if(roll<=3){addT(r,'bladeKiss');S.stab-=6;return`The attempt nearly works. ${r.name} lives, but now carries the scar.`;}
+ if(roll<=5){const k=S.kids.filter(x=>x.alive);if(k.length){const v=pick(k);v.alive=false;S.stab-=10;AU.doom();return`💀 The killers miss you and get ${v.name} instead. Fuck. The house screams.`;}}
+ if(roll<=7&&S.year>18){setTimeout(()=>{if(!S.over)die(n.knife?'knife':'poison');ui();},50);return`💀 It works. ${r.name} doesn't wake up.`;}
+ S.gold-=40;return'A fire at the warehouse. Money burns, nobody dies.';}
+function EV_BROTHERS(s){return{k:'SUCCESSION',major:true,h:'Blood against blood',t:`${s.name} says the inheritance is a fucking joke and they should be sitting in your chair. Half the guards are listening.`,
+ o:[{l:'Buy them off (100💰)',f:()=>{S.gold-=100;return`${s.name} takes the money. For now.`;}},{l:'Exile them',f:()=>{s.alive=false;S.stab-=5;S.dead.push(s);return`${s.name} is put on a boat. They swear revenge.`;}},
+ {l:'🩸 End it permanently',f:()=>{s.alive=false;addT(S.ruler,'redHand');S.nb.forEach(n=>n.op-=10);return`${s.name} vanishes. Everyone knows what you did.`;}}],ig:()=>{S.stab-=20;return'Civil war in the halls. Stability craters.';}};}
+function EV_FEAST_POISON(){return{k:'SUDDEN',major:true,h:'The wine tastes wrong',t:'Halfway through the toast, your tongue goes numb. Across the table, someone smiles a little too wide.',
+ o:[{l:'Spit it out and grab the taster (Health)',f:()=>chk('hp',12)?'You vomit, live, and the taster runs. Close call.':(setTimeout(()=>{if(!S.over)die('poison');},50),'💀 Too late.')},{l:'Drink the antidote you always carry',req:()=>hasT(S.ruler,'door')||hasT(S.ruler,'offGrid'),f:()=>'You always carry the antidote. You are smiling now too.'}],ig:()=>{setTimeout(()=>{if(!S.over)die('poison');},50);return'💀 You keep drinking.';}};}
+const EVENTS=[
+{make:()=>{const n=rn();return{k:'DIPLOMACY',h:'A gift basket',safe:0,t:`${n.sig} ${n.n} sends imported whiskey and a handwritten note: <i>"Neighbors should look after each other."</i> Lovely handwriting.`,o:[{l:'Send a gift back (30💰)',f:()=>{S.gold-=30;n.op+=10;return`${n.n} is pleased.`;}},{l:'Have it tested first',f:()=>{if(n.knife&&Math.random()<.5){S.clues[n.i]=(S.clues[n.i]||0)+1;return`The seal was tampered with. (Clue against ${n.n})`;}n.op-=5;return'Just whiskey. Word gets out you checked it.';}},{l:'Ignore it',f:()=>{n.op-=8;n.grudge+=5;return`${n.n} feels snubbed.`;}}]};}},
+{cond:()=>!S.spouse||!S.spouse.alive,make:()=>({k:'COURT',h:'Marriage offer',safe:0,t:'A matchmaker arrives with three files and a bad cologne. "Love is optional. Alliances aren\'t."',o:[
+ {l:'Marry into a neighbor house (alliance)',f:()=>{const n=rn();S.spouse=rollP(R(19,30));n.allied=true;n.op+=30;return`${S.ruler.name} marries ${S.spouse.name} of ${n.n}. An alliance, and a stranger in your bed.`;}},
+ {l:'Marry money (+150💰)',f:()=>{S.spouse=rollP(R(19,30));S.gold+=150;return`${S.ruler.name} marries ${S.spouse.name}, a tech heiress. The prenup is forty pages.`;}},
+ {l:'Marry for love',f:()=>{S.spouse=rollP(R(19,30));addT(S.spouse,'striking');S.stab+=5;return`${S.ruler.name} marries ${S.spouse.name} for love. The feeds go wild. The night goes dark.`;}}]})},
+{make:()=>({k:'STREETS',h:'Riot on Ninth Street',safe:1,t:'Protesters torch two of your delivery trucks. Someone sprays <i>"ASHGRAVE EATS ITS OWN"</i> across the clinic.',o:[{l:'Send the enforcers (War)',f:()=>{if(chk('mar',12)){S.stab+=4;return'The riot breaks. Nobody films it. Mostly.';}S.stab-=8;return'The footage goes viral. Shit.';}},{l:'Hand out food and cash (60💰)',f:()=>{S.gold-=60;S.stab+=8;return'Bellies full, tempers cool.';}},{l:'Let it burn out',f:()=>{S.stab-=10;return'It doesn\'t burn out.';}}]})},
+{make:()=>({k:'MEDIA',h:'The podcast',safe:0,t:'A loudmouth podcaster with three million followers says your family "built its money on bodies." He isn\'t entirely wrong.',o:[{l:'Go on his show (Charm)',f:()=>{if(chk('dip',13)){S.pres+=8;if(Math.random()<.3)addT(S.ruler,'camera');return'You charm the room. He apologises live.';}S.pres-=6;return'You lose your temper on camera. The clip lives forever.';}},{l:'Buy the network (120💰)',f:()=>{S.gold-=120;S.pres+=4;return'The show is "on hiatus" now.';}},{l:'Make him disappear',f:()=>{S.stab-=6;addT(S.ruler,'knuckle');return'He disappears. So does your reputation for mercy.';}}]})},
+{make:()=>{const n=rn();return{k:'BORDER',h:'Fence line dispute',safe:0,t:`${n.n}'s crew put up a fence six meters onto your lot. Their boss says, "Survey's old. Bitch about it in court."`,o:[{l:'Negotiate (Charm)',f:()=>chk('dip',11)?(n.op+=5,'The fence comes down. Handshakes all round.'):(n.grudge+=8,'Talks go nowhere. Insults are traded.')},{l:'Tear it down at night',f:()=>{n.grudge+=15;n.op-=15;return`${n.n} wakes up furious.`;}},{l:'Let them have it',f:()=>{S.pres-=5;return'Six meters. They\'ll want more.';}}]};}},
+{min:5,make:()=>({k:'LEDGER',h:'The crypto kid',safe:2,t:'A twitchy kid in a hoodie swears his coin will "10x by spring". He has charts. So many charts.',o:[{l:'Invest 100💰 (Ledger)',f:()=>{S.gold-=100;if(chk('stw',14)){S.gold+=300;return'It triples. You cash out before the crash. Genius.';}return'It goes to zero. The kid moves to Dubai.';}},{l:'Invest everything',req:()=>S.gold>200,f:()=>{const g=S.gold;if(Math.random()<.25){S.gold+=g*2;return'Holy shit. It worked.';}S.gold=0;S.stab-=10;return'Broke. Completely fucking broke.';}},{l:'Throw him out',f:()=>'Smart. Probably.'}]})},
+{cond:()=>S.ruler.age>40,make:()=>({k:'HEALTH',h:'Chest pains',safe:0,t:`${S.ruler.name} wakes at 4am with an elephant on their chest. The doctor says, "Less whiskey, fewer enemies."`,o:[{l:'Private clinic (80💰)',f:()=>{S.gold-=80;S.ruler.base.hp+=1;return'Stents in. Back in the chair by Monday.';}},{l:'Tough it out (Health)',f:()=>chk('hp',13)?'It passes.':(S.ruler.base.hp-=2,addT(S.ruler,'limp'),'It doesn\'t pass. You\'re never quite the same.')},{l:'Keep drinking',f:()=>{addT(S.ruler,'bottle');return'The bottle listens better than the doctor.';}}]})},
+{min:3,make:()=>({k:'HEART',h:'A late-night visitor',safe:1,t:'A sharp-eyed consultant keeps staying after meetings. Tonight they lock the office door and loosen your tie.',o:[{l:'Let it happen (fade to black)',f:()=>{addT(S.ruler,'restless');if(Math.random()<.4)S.evQ.push(EV_BLACKMAIL());return'Morning. Lipstick on the collar. Problems later.';}},{l:'Show them the door',f:()=>{addT(S.ruler,'locked');return'They leave. Nobody ever knows how close it came.';}},{l:'Turn them into a spy',f:()=>{const n=rn();if(n.knife){S.clues[n.i]=(S.clues[n.i]||0)+1;return`They report to ${n.n}. Now they report to you. (Clue)`;}return'They know nothing useful, but they\'re very motivated.';}}]})},
+{min:8,hard:1,make:()=>{const n=rn();return{k:'SCANDAL',h:'Leaked messages',major:true,t:`Someone dumps a year of your texts online. The worst ones are about ${n.n}. Their ruler reads them out on live TV.`,o:[{l:'Call it a deepfake (Cunning)',f:()=>chk('cun',13)?'"AI-generated slander." Half the city believes you.':(n.grudge+=20,S.pres-=10,'Nobody believes you.')},{l:'Apologise publicly',f:()=>{S.pres-=5;n.grudge=Math.max(0,n.grudge-10);n.op+=10;return'You grovel. It works, a little.';}},{l:'Double down',f:()=>{n.grudge+=30;n.op-=30;S.pres+=5;return`"I meant every word." ${n.n} wants blood.`;}}]};}},
+{min:10,hard:1,make:()=>({k:'WAR',h:'Mercenaries for hire',safe:1,t:'Ex-military contractors with drones and no flag. "We fight for whoever\'s payment clears."',o:[{l:'Hire them (120💰, +35 troops)',req:()=>S.gold>=120,f:()=>{S.gold-=120;S.troops+=35;return'Drones over the rooftops. You feel untouchable.';}},{l:'Pass',f:()=>'They go knock on a neighbor\'s door instead.'},{l:'Hire them to watch the neighbors (80💰)',f:()=>{S.gold-=80;const n=S.nb[S.knife];if(Math.random()<.5){S.clues[S.knife]=(S.clues[S.knife]||0)+1;return`Drone footage: ${n.n} meeting strangers at 2am. (Clue)`;}return'Footage of four boring families. Or are they?';}}]})},
+{make:()=>({k:'FAITH',h:'The preacher of the Ward',safe:0,t:'A firebrand preacher packs a parking garage every Sunday. He calls your house "the rot". The crowds keep growing.',o:[{l:'Donate to his church (50💰)',f:()=>{S.gold-=50;S.stab+=5;addT(S.ruler,'candle');return'He preaches about your generosity now.';}},{l:'Debate him (Charm)',f:()=>chk('dip',14)?(S.pres+=8,'You win. Half his flock follows you home.'):(S.stab-=8,'He wins. Badly.')},{l:'Burn the garage',f:()=>{S.stab-=12;addT(S.ruler,'godless');return'Ash and sirens. Martyrs are dangerous.';}}]})},
+{min:6,make:()=>{const n=rn();return{k:'NEIGHBOR',h:'Your neighbor needs help',safe:0,t:`${n.n} is broke. Floods took their warehouses. Their ruler asks for 100 gold "between friends".`,o:[{l:'Lend it (100💰)',f:()=>{S.gold-=100;n.op+=25;n.grudge=0;return n.knife?'They thank you warmly. Too warmly?':`${n.n} will remember this.`;}},{l:'Refuse politely',f:()=>{n.grudge+=10;n.op-=10;return'They say they understand. They don\'t.';}},{l:'Laugh at them',f:()=>{n.grudge+=30;n.op-=30;return`${n.n}'s ruler hangs up without a word.`;}}]};}},
+{min:12,hard:1,make:()=>({k:'SUDDEN',h:'Something under the car',major:true,t:'The valet hesitates with the keys. Something under the chassis is blinking.',o:[{l:'Run (Health)',f:()=>chk('hp',10)?'You dive behind a wall as the street turns orange. Alive.':(addT(S.ruler,'limp'),'The blast throws you twenty feet. You live, barely.')},{l:'Call the bomb squad and stay calm',req:()=>hasT(S.ruler,'ice')||hasT(S.ruler,'ironNerve'),f:()=>{S.pres+=6;return'You sip coffee while they defuse it. The photo becomes famous.';}},{l:'Make the valet start it',f:()=>{S.stab-=5;addT(S.ruler,'knuckle');return'Poor bastard.';}}],ig:()=>{if(Math.random()<.5){setTimeout(()=>{if(!S.over)die('knife');},50);return'💀 You turned the key.';}return'The bomb was a dud. Somebody wanted you scared.';}})},
+{min:15,make:()=>({k:'TECH',h:'The surveillance offer',safe:0,t:'A startup offers city-wide face recognition. "Know who\'s coming before they knock."',o:[{l:'Buy it (150💰)',req:()=>S.gold>=150,f:()=>{S.gold-=150;addT(S.ruler,'door');S.stab-=4;const n=S.nb[S.knife];S.clues[S.knife]=(S.clues[S.knife]||0)+1;return`The cameras catch ${n.n}'s people casing your kids' school. (Clue)`;}},{l:'Too creepy',f:()=>{S.stab+=3;return'The people appreciate a little privacy.';}}]})},
+{min:4,make:()=>{const n=rn();return{k:'INSULT',h:'The toast',safe:0,t:`At a charity gala, ${n.n}'s heir makes a joke about your mother. The room goes silent and looks at you.`,o:[{l:'Laugh it off (Charm)',f:()=>chk('dip',11)?(S.pres+=4,'Your comeback gets a bigger laugh.'):(S.pres-=4,'You laugh too late. Everyone noticed.')},{l:'Throw your drink in his face',f:()=>{n.grudge+=15;S.pres+=3;return'Champagne and a bloody nose. The gossip sites love it.';}},{l:'Smile. Remember.',f:()=>{n.op-=5;return'You write the name down.';}}]};}},
+{cond:()=>S.kids.some(k=>k.alive&&k.age>=14),make:()=>{const k=S.kids.filter(k=>k.alive&&k.age>=14)[0];return{k:'FAMILY',h:'Your kid\'s gone wild',safe:0,t:`${k.name} wrecked a sports car at 3am, filmed it, and posted it. The passenger was a neighbor's heir.`,o:[{l:'Pay everyone off (70💰)',f:()=>{S.gold-=70;return'Lawyers. NDAs. Silence.';}},{l:'Send them to military school',f:()=>{k.base.mar+=2;addT(k,'ironNerve');return`${k.name} comes back harder.`;}},{l:'Let them face it',f:()=>{S.pres-=6;addT(k,'fuse');return`${k.name} never forgives you.`;}}]};}},
+{min:20,hard:1,make:()=>({k:'PLAGUE',h:'The fever',major:true,t:'A new fever is tearing through the districts. Hospitals are full. Pharma houses are naming their price.',o:[{l:'Buy vaccines for your people (120💰)',f:()=>{S.gold-=120;S.stab+=10;return'Your districts recover first. They will remember who paid.';}},{l:'Buy for the family only (40💰)',f:()=>{S.gold-=40;S.stab-=12;return'The family is safe. The streets know it.';}},{l:'Do nothing',f:()=>{S.stab-=15;const k=S.kids.filter(x=>x.alive);if(k.length&&Math.random()<.5){const v=pick(k);v.alive=false;return`💀 ${v.name} catches it.`;}return'The fever burns through and leaves.';}}]})},
+{min:25,hard:1,make:()=>({k:'COUP',h:'The general\'s smile',major:true,t:'Your top commander has been dining with bankers. He calls you "boss" with a smile that doesn\'t reach his eyes.',o:[{l:'Promote him (Charm)',f:()=>chk('dip',13)?'He\'s loyal again. For now.':(S.troops-=15,'He takes a third of the army and leaves.')},{l:'Have him arrested',f:()=>{S.troops-=8;S.stab-=3;return'The arrest is ugly but quick.';}},{l:'Give him a district (lose 1)',req:()=>myTiles()>1,f:()=>{const t=S.tiles.find(t=>t.o===9);t.o=-2;return'He becomes a lord. Loyal, and ambitious.';}}],ig:()=>{S.troops=Math.round(S.troops*.6);S.stab-=15;return'He marches the army through your gates.';}})},
+{min:30,make:()=>({k:'OFFER',h:'Walk away',major:true,t:'A quiet man offers a new identity, an island, and a boat leaving tonight. "No crown is worth this many funerals."',o:[{l:'Stay. The blood stays.',f:()=>'You tear up the passport.'},{l:'Take the boat',f:()=>{setTimeout(()=>end('ghost'),50);return'You leave without saying goodbye.';}}]})}
+];
+function EV_BLACKMAIL(){const n=rn();return{k:'SCANDAL',major:true,h:'Photos',t:`An envelope with photos from that night. A note: <i>"500 gold or your spouse sees them."</i> The postmark is from ${n.seat}.`,o:[{l:'Pay (150💰)',f:()=>{S.gold-=150;return'Paid. They\'ll come back.';}},{l:'Confess to your spouse',f:()=>{S.stab-=6;if(S.spouse&&Math.random()<.4){S.spouse.alive=false;return'Your spouse leaves and takes the good lawyers.';}return'Screaming. Then, slowly, forgiveness.';}},{l:'Find the blackmailer (Cunning)',f:()=>chk('cun',14)?(n.grudge+=10,S.clues[n.i]=(S.clues[n.i]||0)+(n.knife?1:0),`Traced to ${n.n}.`+(n.knife?' (Clue)':'')):'The trail goes cold.'}],ig:()=>{S.pres-=12;S.stab-=8;return'The photos go public.';}};}
+// ===== GOT-URSIX CODEX layer: War Signs by birth day, elements, Fated/Trickster/Holy days =====
+const SIGNS=[['Emberfang',1,3,'Fire'],['Stonewarden',4,6,'Earth'],['Galeborn',7,8,'Wind'],['Tidecaller',9,11,'Water'],['Ashcrown',12,15,'Fire'],['Rootkeeper',16,17,'Earth'],['Stormquill',18,19,'Wind'],['Deepmire',20,21,'Water'],['Flarewing',22,24,'Fire'],['Ironvale',25,27,'Earth'],['Skyrender',28,29,'Wind'],['Moonwell',30,31,'Water']];
+const ELB={Fire:'mar',Earth:'stw',Wind:'cun',Water:'dip'},OPP={Fire:'Water',Water:'Fire',Earth:'Wind',Wind:'Earth'},ELI={Fire:'🔥',Earth:'⛰️',Wind:'🌬️',Water:'🌊'};
+function signOf(p){if(!p.day)p.day=R(1,31);const s=SIGNS.find(s=>p.day>=s[1]&&p.day<=s[2]);return{n:s[0],e:s[3]};}
+const _stat=stat;stat=function(p,s){let v=_stat(p,s);const g=signOf(p);if(ELB[g.e]===s)v+=1;return v;};
+function signRel(n){const a=signOf(S.ruler).e,b=signOf(n.ruler).e;return a===b?1:OPP[a]===b?-1:0;}
+const RARE=[
+()=>({k:'✨ RARE · FATED DAY (BLESSED)',major:true,h:'A Blessed Fated Day',t:`The almanac marks today Blessed for ${signOf(S.ruler).n}. The Col would call it "statistically smug". Everything you touch seems to land.`,o:[{l:'Strike a deal with every house',f:()=>{S.nb.forEach(n=>{n.op+=15;n.grudge=Math.max(0,n.grudge-15);});return'Four handshakes. Four grudges softened.';}},{l:'Move the money while luck holds',f:()=>{S.gold+=200;return'+200 gold. Fortune favours the scheduled.';}},{l:'Ask the stars who wants you dead',f:()=>{S.clues[S.knife]=(S.clues[S.knife]||0)+1;return`The signs point at ${S.nb[S.knife].n}. (Clue)`;}}]}),
+()=>({k:'✨ RARE · FATED DAY (CURSED)',major:true,h:'A Cursed Fated Day',t:'Black cats, broken mirrors, a crow on the balcony that won\'t leave. Today is Cursed. Plans made today rot.',o:[{l:'Cancel everything, stay inside',f:()=>{S.gold-=30;return'A wasted day. A safe one.';}},{l:'Defy the stars (Health)',f:()=>chk('hp',13)?(S.pres+=10,'You laugh at fate. Fate blinks first.'):(addT(S.ruler,'haunted'),S.stab-=8,'Fate does not like being laughed at.')}]}),
+()=>({k:'✨ RARE · TRICKSTER DATE',h:'A Trickster Date',t:'Neither blessed nor cursed, just unreliable. Your accountant swears the books balance, then swears they don\'t.',o:[{l:'Gamble on it',f:()=>{const g=R(-150,250);S.gold+=g;return g>0?`Trickster pays: +${g} gold.`:`Trickster bites: ${g} gold.`;}},{l:'Swap two neighbors\' grudges',f:()=>{const a=rn(),b=rn();const t=a.grudge;a.grudge=b.grudge;b.grudge=t;return`Rumours fly. ${a.n} and ${b.n} now hate different people.`;}}]}),
+()=>({k:'✨ RARE · WAR HOLY DAY',h:'War Holy Day',t:'No blood may be spilled today by old law. Even the cartels honour it. Mostly.',o:[{l:'Honour it, march in the parade',f:()=>{S.stab+=10;S.pres+=6;if(S.war)S.war.p=50;return'The city loves you. The war pauses.';}},{l:'Break it and strike while they pray',f:()=>{if(S.war)S.war.p+=30;addT(S.ruler,'oathbreak');S.nb.forEach(n=>n.op-=15);return'It works. Nobody will ever trust you on a holy day again.';}}]}),
+()=>({k:'✨ RARE · THE CUP',h:'Two signs mesh',t:`Your sign and ${S.nb[R(0,3)].n}'s ruler sit in a Cup tonight, where two War Signs overlap. The Codex calls it "a rare overlap of stubbornness".`,o:[{l:'Propose a blood pact',f:()=>{const n=rn();n.allied=true;n.op+=25;return`A pact with ${n.n}. ${n.knife?'They agreed very fast.':''}`;}},{l:'Use it to read their mind (Cunning)',f:()=>chk('cun',12)?(S.clues[S.knife]=(S.clues[S.knife]||0)+1,'You learn what you needed. (Clue)'):'Nothing but static.'}]}),
+()=>({k:'✨ RARE · COMET',major:true,h:'Red comet',t:'A red comet hangs over the city for three nights. Every faction says it\'s a sign for them.',o:[{l:'Claim it as your omen (Charm)',f:()=>chk('dip',12)?(S.pres+=25,'The feeds crown you "Child of the Comet".'):(S.pres-=5,'Nobody buys it.')},{l:'Sell comet merch (+120💰)',f:()=>{S.gold+=120;return'T-shirts. Mugs. Destiny has a markup.';}}]})
+];
+const _spawn=spawnEvent;spawnEvent=function(){if(!S.evQ.length&&Math.random()<.09){showEv(pick(RARE)());return;}_spawn();};
+// ===== 4 WIN CONDITIONS =====
+const WINS=[{id:'crown',n:'👑 Crown',d:'Take every district or wipe out every rival house',p:()=>myTiles()/26},{id:'legacy',n:'🩸 Legacy',d:'Keep the bloodline alive to Year 80',p:()=>S.year/END_YEAR},{id:'fortune',n:'💰 Fortune',d:'Bank 3,000 gold and buy the city outright',p:()=>Math.max(0,S.gold)/3000},{id:'glory',n:'🌟 Glory',d:'Reach 300 prestige. The feeds make you a living myth',p:()=>Math.max(0,S.pres)/300}];
+function winCheck(){if(S.over)return;if(myTiles()>=26||S.nb.every(n=>!n.alive))return end('crown');if(S.gold>=3000)return end('fortune');if(S.pres>=300)return end('glory');}
+const _yt=yearTick;yearTick=function(){if(S.over)return;S.nb.forEach(n=>{if(n.alive){const r=signRel(n);n.op+=r;if(r<0)n.grudge+=1;}});_yt();if(S.year<12)S.stab=Math.max(S.stab,20);winCheck();};
+// ===== ENDINGS =====
+const ENDS={crown:['THE CONCRETE CROWN',1,300,'Every district flies the Ashgrave flame. The old families kneel, or rot. You built a kingdom out of a broken country.'],
+legacy:['THE LONG BLOOD',1,220,'Eighty years. Wars, knives, fevers and funerals, and the name still stands. Somewhere a child with your eyes is learning to lie.'],
+fortune:['THE CITY IS BOUGHT',1,240,'Why conquer what you can buy? You own the banks, the debt and the cops. Every neighbor pays you rent now.'],
+glory:['LIVING MYTH',1,240,'Statues, songs, a streaming biopic. Nobody can touch a legend. Even your enemies wear your merch.'],
+extinct:['THE LINE ENDS',0,40,'No heir. No blood. The neighbors split your districts by Tuesday and paint over your name by Friday.'],
+poison:['A BITTER CUP',0,50,'Poison, and no heir to avenge it. The house dies at the dinner table.'],
+knife:['THE FRIENDLY KNIFE',0,60,'It was the neighbor who sent the gift baskets. The one who smiled. You never saw it coming, and now nobody is left to.'],
+revolt:['THE STREETS RISE',0,50,'The people you squeezed finally squeezed back. Your palace burns on every feed in the city.'],
+coup:['BANKRUPT',0,40,'The money ran out, and loyalty ran out with it. Your own guards open the gates.'],
+conquered:['OVERRUN',0,40,'Your last district falls. The family name becomes a street sign in somebody else\'s city.'],
+exile:['THE WRONG NAME',0,50,'Two false accusations. Nobody believes a word you say. You are exiled, and the real knife takes your seat.'],
+ghost:['GHOST ON AN ISLAND',1,90,'You walked away. Somewhere warm, under a fake name, you sleep through the night for the first time in decades.']};
+function end(id){if(S.over)return;S.over=true;AU.stop();$('ev').style.display='none';const e=ENDS[id];const legacy=Math.round(S.year*3+myTiles()*15+S.pres+S.gen*20);const glow=Math.round(e[2]+S.year*2+(S.glowBonus||0));
+ SAVE.glow+=glow;SAVE.best=Math.max(SAVE.best,legacy);if(!SAVE.endings.includes(id))SAVE.endings.push(id);persist();e[1]?AU.bell():AU.doom();
+ $('endh').textContent=e[0];$('endt').innerHTML=e[3]+`<br><br><i>${S.gen} generation(s) · ${S.year} years · ${myTiles()} districts · The enemy was ${S.nb[S.knife].n}${S.flags.knifeFound?' (you found them)':' (you never knew)'}.</i>`;
+ $('ends').innerHTML=`${e[1]?'VICTORY':'GAME OVER'} · Legacy score ${legacy} · +${glow} ✨ Glow Tokens (total ${SAVE.glow})`;go('end');}
+// ===== CUTSCENES =====
+let CQ=[],CI=0,CF=null,cTyp=0;function playCut(lines,fin){CQ=lines;CI=0;CF=fin;if(S)S.paused=true;go('cut');showLine();}
+function showLine(){const t=CQ[CI];let i=0;clearInterval(cTyp);$('cutt').textContent='';cTyp=setInterval(()=>{$('cutt').textContent=t.slice(0,++i);if(i%3===0)AU.tone(300+R(0,80),.03,'square',.02);if(i>=t.length)clearInterval(cTyp);},22);}
+function cutNext(){if($('cutt').textContent.length<CQ[CI].length){clearInterval(cTyp);$('cutt').textContent=CQ[CI];return;}CI++;if(CI>=CQ.length)cutEnd();else showLine();}
+function cutEnd(){clearInterval(cTyp);if(S){S.paused=false;lastT=performance.now();}const f=CF;CF=null;if(f)f();}
+const PROLOGUE=()=>[`The country didn't fall in one day. It rotted, one bankrupt city at a time, until the government was a logo on an empty building.`,`What was left belonged to the families. Five of them carved up the city, with private armies, private banks and private gods.`,`You are ${S.ruler.name} of ${YOU.n}. Age ${S.ruler.age}. Born under ${signOf(S.ruler).n} (${signOf(S.ruler).e}).\nTraits: ${S.ruler.traits.map(t=>TR[t].n).join(', ')}.`,`Four neighbors share your borders. They all smile at you. One of them is already planning your funeral.\nYou don't know which.`,`Four ways to win: take the city, buy it, become its legend, or simply outlast everyone.\nOne hour. Make it count.`];
+const ACT_CUT=[PROLOGUE,()=>[`Year ${S.year}. ${ACTS[1].n}.`,`The block is yours. Now the city wants to know if you can hold more than a block.`,`Neighbors are watching. Every insult, every unpaid favour, every ignored letter... they remember.`],
+()=>[`Year ${S.year}. ${ACTS[2].n}.`,`Someone has been feeding your enemies information for years. Schedules. Routes. Names.`,`Gather clues. Then accuse a house. Get it wrong twice and you're finished.`],
+()=>[`Year ${S.year}. ${ACTS[3].n}.`,`The old rivals are grey now, and their kids are hungrier than they ever were.`,`Finish it. Crown, Fortune, Glory or Legacy. Or watch the name die.`]];
+function REVEAL(n){return[`It was ${n.n}.`,`The gift baskets. The warm notes. The loan you gave them when the floods came.`,`${n.ruler.name} doesn't even deny it. "Nothing personal. Your family just lives too long."`,`Now everyone knows. Now it's war.`];}
+function ui(){if(!S||S.over)return;const r=S.ruler,g=signOf(r);
+ $('rGold').textContent=Math.round(S.gold);$('rTroops').textContent=Math.round(S.troops);$('rPres').textContent=S.pres;$('rStab').textContent=S.stab;$('rPress').textContent=S.press;$('rYear').textContent=`Year ${S.year+1}/${END_YEAR}`;
+ const st=['mar','dip','cun','stw','hp'],nm={mar:'War',dip:'Charm',cun:'Cunning',stw:'Ledger',hp:'Health'};
+ const heirs=S.kids.filter(k=>k.alive).sort((a,b)=>b.age-a.age);
+ let h=`<h3>${YOU.sig} ${r.name}, age ${r.age} · Gen ${S.gen}</h3><div class="tag">${ELI[g.e]} ${g.n} (${g.e}) · ${S.steward?'Steward Mode':'Direct rule'}</div><div>${st.map(s=>`${nm[s]} <b>${stat(r,s)}</b>`).join(' · ')}</div><div>${tlist(r)}</div>`;
+ h+=`<div class="tag" style="margin-top:4px">Spouse: ${S.spouse&&S.spouse.alive?S.spouse.name+' '+tlist(S.spouse):'none'}</div><div class="tag">Heirs: ${heirs.length?heirs.map(k=>`${k.name} (${k.age}) ${tlist(k)}`).join('<br>'):'<b style="color:#e55">NONE. If you die, the line ends.</b>'}</div>`;
+ h+=`<h3 style="margin-top:8px">📜 ${ACTS[S.act].n}</h3>`+ACTS[S.act].goals.map((q,i)=>`<div>${goalDone(S.act,i)?'✅':'⬜'} ${q}</div>`).join('');
+ h+=`<h3 style="margin-top:8px">Paths to victory</h3>`+WINS.map(w=>`<div>${w.n} <span class="tag">${w.d}</span><div class="bar"><i style="width:${cl(w.p()*100,0,100)}%;background:#d9a441"></i></div></div>`).join('');
+ if(S.war){const n=S.nb[S.war.i];h+=`<h3 style="margin-top:8px">⚔️ War with ${n.n}</h3><div class="bar"><i style="width:${cl(S.war.p,0,100)}%"></i></div><div class="tag">100 = victory, 0 = defeat</div>`;}
+ $('ruler').innerHTML=h;
+ $('nbr').innerHTML=S.nb.map(n=>{if(!n.alive)return`<div class="nb" style="opacity:.4">${n.sig} ${n.n}: destroyed</div>`;const mood=n.op>40?'Warm':n.op>10?'Friendly':n.op>-15?'Neutral':n.op>-45?'Cold':'Hostile';const rel=signRel(n);const c2=S.clues[n.i]||0;
+  return`<div class="nb"><div><b style="color:${n.c}">${n.sig} ${n.n}</b>${n.allied?' 🤝':''}<br><span class="tag">${n.ruler.name} (${n.ruler.age}) · ${mood} · ${nbTiles(n.i)} dist · ${Math.round(n.troops)}⚔️ · ${ELI[signOf(n.ruler).e]}${rel>0?' kindred sign':rel<0?' clashing sign':''}${c2?' · 🔎'+c2:''}</span></div><div style="white-space:nowrap">
+  <button class="btn sm" onclick="gift(${n.i})">Gift</button><button class="btn sm" onclick="declareWar(${n.i})">War</button>${S.act>=2&&!S.flags.knifeFound?`<button class="btn sm" onclick="if(confirm('Accuse ${n.n}? Two wrong accusations end your house.'))accuse(${n.i})">Accuse</button>`:''}</div></div>`;}).join('')+`<div class="tag">Clues found: ${Object.values(S.clues).reduce((a,b)=>a+b,0)}. Some are planted. ${S.act<2?'Accusations open in Act III.':''}</div>`;
+ $('log').innerHTML=S.log.map(l=>`<div>${l}</div>`).join('');}
+function gift(i){if(S.gold<40)return toast('Need 40 gold.');S.gold-=40;const n=S.nb[i];n.op+=12;n.grudge=Math.max(0,n.grudge-10);toast(`${n.n} accepts your gift.`);AU.coin();ui();}
+const cv=$('cv'),cx=cv.getContext('2d');let MW=0,MH=0;function resize(){const b=$('map').getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);MW=b.width;MH=b.height;cv.width=MW*d;cv.height=MH*d;cx.setTransform(d,0,0,d,0,0);}addEventListener('resize',()=>{if(S)resize();});
+function draw(){if(!MW)return;const t=performance.now()/1000;const gr=cx.createLinearGradient(0,0,0,MH);gr.addColorStop(0,'#1b1020');gr.addColorStop(1,'#0a0705');cx.fillStyle=gr;cx.fillRect(0,0,MW,MH);
+ const cw=MW/6,ch=MH/5;S.tiles.forEach(tl=>{const x=tl.x*cw,y=tl.y*ch;const col=tl.o===9?YOU.c:tl.o===-2?'#3a3530':S.nb[tl.o].c;cx.globalAlpha=.5;cx.fillStyle=col;cx.fillRect(x+2,y+2,cw-4,ch-4);cx.globalAlpha=1;
+  const seed=tl.x*7+tl.y*13;for(let b=0;b<4;b++){const bw=cw*.16,bh=ch*(.25+((seed*(b+3))%7)/14);const bx=x+cw*.08+b*cw*.22,by=y+ch-6-bh;cx.fillStyle='#120d0b';cx.fillRect(bx,by,bw,bh);cx.fillStyle=(Math.sin(t*.7+seed+b)>.3)?'#f3c86a':'#3a2a1a';for(let w=0;w<3;w++)cx.fillRect(bx+3,by+5+w*bh/4,bw-6,2);}
+  cx.strokeStyle='rgba(0,0,0,.6)';cx.strokeRect(x+2,y+2,cw-4,ch-4);});
+ cx.font=`${Math.max(14,Math.min(cw,ch)*.4)}px serif`;cx.textAlign='center';cx.textBaseline='middle';
+ const marks=[[YOU.sig,9]].concat(S.nb.map((n,i)=>[n.sig,i]));marks.forEach(([s,o])=>{const tt=S.tiles.filter(q=>q.o===o);if(!tt.length)return;const ax=tt.reduce((a,q)=>a+q.x,0)/tt.length+.5,ay=tt.reduce((a,q)=>a+q.y,0)/tt.length+.5;cx.fillText(s,ax*cw,ay*ch+Math.sin(t*2+ax)*2);});
+ if(S.war){cx.fillStyle=`rgba(200,30,20,${.12+.08*Math.sin(t*6)})`;cx.fillRect(0,0,MW,MH);}
+ if(S.press>50){cx.fillStyle=`rgba(120,0,0,${(S.press-50)/250})`;cx.fillRect(0,0,MW,MH);}
+ cx.fillStyle='#d9a441';cx.fillRect(0,MH-3,MW*(S.t/YEAR_SEC),3);}
+function openCap(){AU.init();const c=$('capc');if(!SAVE.cap){c.innerHTML=`<h2>Create-a-Player 🔒</h2><p style="max-width:460px">Design your own founder: name, birth day (War Sign), stats and traits.<br>Unlock for <b>500 ✨ Glow Tokens</b> (≈ $4.99 value). Every run earns tokens, and wins and exposing the enemy earn more.</p><p>You have <b>${SAVE.glow}</b> ✨</p><button class="btn" ${SAVE.glow<500?'disabled':''} onclick="SAVE.glow-=500;SAVE.cap=true;persist();AU.coin();openCap()">Unlock (500 ✨)</button><button class="btn" onclick="go('title');refreshTitle()">Back</button>`;go('cap');return;}
+ const nm={mar:'War',dip:'Charm',cun:'Cunning',stw:'Ledger',hp:'Health'};
+ c.innerHTML=`<h2>Create-a-Player</h2><input id="cName" placeholder="Name" value="${pick(FN)}"> <label class="tag">Born on day <input id="cDay" type="number" min="1" max="31" value="13" style="width:60px"> (sets your War Sign)</label><p class="tag">Spend up to 30 points across stats (2-10 each). Pick up to 3 traits.</p><div class="row">${Object.keys(nm).map(s=>`<label class="tag">${nm[s]} <input id="c_${s}" type="number" min="2" max="10" value="6" style="width:56px"></label>`).join('')}</div>
+ <div class="row" style="max-width:640px">${NAT.concat(BORN).map(t=>`<label class="tag" style="padding:3px" title="${TR[t].d}"><input type="checkbox" class="cT" value="${t}">${TR[t].n}</label>`).join('')}</div>
+ <button class="btn" onclick="capGo()">Found the dynasty</button><button class="btn" onclick="go('title');refreshTitle()">Back</button>`;go('cap');}
+function capGo(){const b={};let sum=0;['mar','dip','cun','stw','hp'].forEach(s=>{b[s]=cl(parseInt($('c_'+s).value)||2,2,10);sum+=b[s];});if(sum>30)return toast(`You used ${sum} points. The limit is 30.`);
+ const tr=[...document.querySelectorAll('.cT:checked')].map(e=>e.value).slice(0,3);newRun(false,{name:$('cName').value.trim().slice(0,20)||'Nameless',base:b,traits:tr,day:cl(parseInt($('cDay').value)||13,1,31)});}
+</script></body></html>
