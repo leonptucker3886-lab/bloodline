@@ -37,7 +37,7 @@ h2{color:#d9a441;margin:.3em 0}.sub{font-style:italic;color:#c9b493}
 input,select{font:16px Georgia;padding:6px;margin:4px;background:#1d130d;color:#efe4d2;border:1px solid #d9a441;border-radius:6px}
 .row{display:flex;flex-wrap:wrap;justify-content:center;gap:2px}
 </style></head><body>
-<div id="gate" class="scr on"><h1>18+</h1><p style="max-width:520px">BLOODLINE contains strong language, violence, betrayal, adult themes and implied sex (fade to black). All characters are adults. Are you 18 or older?</p>
+<div id="gate" class="scr on"><h1>18+</h1><div style="display:inline-block;background:#d9a441;color:#1b0d08;font:bold 12px sans-serif;letter-spacing:1px;padding:3px 10px;border-radius:99px;margin-bottom:8px">IN TESTING · v0.2</div><p style="max-width:520px">BLOODLINE contains strong language, violence, betrayal, adult themes and implied sex (fade to black). All characters are adults. Are you 18 or older?</p>
 <button class="btn" onclick="AU.init();go('intro');intro()">I am 18+, enter</button><button class="btn" onclick="location.href='https://www.google.com'">Leave</button></div>
 <div id="intro" class="scr" onclick="introSkip()"><div id="introc"></div></div>
 <div id="title" class="scr"><div class="sub">LeonLink After Dark presents</div><h1>BLOODLINE</h1><h2>Crown &amp; Concrete</h2>
@@ -345,4 +345,45 @@ function openCap(){AU.init();const c=$('capc');if(!SAVE.cap){c.innerHTML=`<h2>Cr
  <button class="btn" onclick="capGo()">Found the dynasty</button><button class="btn" onclick="go('title');refreshTitle()">Back</button>`;go('cap');}
 function capGo(){const b={};let sum=0;['mar','dip','cun','stw','hp'].forEach(s=>{b[s]=cl(parseInt($('c_'+s).value)||2,2,10);sum+=b[s];});if(sum>30)return toast(`You used ${sum} points. The limit is 30.`);
  const tr=[...document.querySelectorAll('.cT:checked')].map(e=>e.value).slice(0,3);newRun(false,{name:$('cName').value.trim().slice(0,20)||'Nameless',base:b,traits:tr,day:cl(parseInt($('cDay').value)||13,1,31)});}
+
+/* ===== v0.2 POLISH PASS: graphics, UI, sound ===== */
+(function(){
+const css=document.createElement('style');css.textContent=`
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:40;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55));}
+.scr.on{animation:fadeIn .45s ease}@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{transform:scale(.88) translateY(14px);opacity:0}to{transform:none;opacity:1}}
+#evb{box-shadow:0 0 0 1px #000,0 0 50px rgba(217,164,65,.25),0 20px 60px #000!important}
+#evb.major{border-color:#e0442a!important;box-shadow:0 0 60px rgba(224,68,42,.45),0 20px 60px #000!important}
+.btn{transition:transform .08s,box-shadow .2s,filter .2s;text-shadow:0 1px 0 #000}
+.btn:hover{filter:brightness(1.18);box-shadow:0 4px 0 #000,0 0 16px rgba(217,164,65,.45)}
+#toast{animation:tIn .3s ease;box-shadow:0 6px 24px #000;letter-spacing:.3px}@keyframes tIn{from{opacity:0;transform:translate(-50%,-12px)}to{opacity:1;transform:translate(-50%,0)}}
+.card{box-shadow:inset 0 1px 0 rgba(255,220,160,.06),0 3px 10px rgba(0,0,0,.4);background:linear-gradient(#21160f,#170f0a)!important}
+.res{box-shadow:inset 0 1px 0 rgba(255,220,160,.08)}
+#evtimer{transition:color .2s}#evtimer.hot{color:#ff6a4a;animation:pulse .6s infinite alternate}@keyframes pulse{to{opacity:.55}}
+#embers{position:fixed;inset:0;pointer-events:none;z-index:1}
+.scr>*{position:relative;z-index:2}
+h1{background:linear-gradient(#f3d27a,#b9781f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 0 #000) drop-shadow(0 0 14px rgba(122,29,16,.9))}
+`;document.head.appendChild(css);
+/* ember particles behind menu screens */
+const ec=document.createElement('canvas');ec.id='embers';document.body.appendChild(ec);const ex=ec.getContext&&ec.getContext('2d');const P=[];
+function er(){ec.width=innerWidth||400;ec.height=innerHeight||300;}if(typeof addEventListener==='function')addEventListener('resize',er);er();
+for(let i=0;i<40;i++)P.push({x:Math.random(),y:Math.random(),v:.0006+Math.random()*.0015,s:1+Math.random()*2.2,p:Math.random()*6});
+function ef(){requestAnimationFrame(ef);if(!ex||!ex.clearRect)return;const g=$('game');const vis=!(g&&g.style.display==='flex');ec.style.display=vis?'block':'none';if(!vis)return;ex.clearRect(0,0,ec.width,ec.height);const t=performance.now()/1000;
+for(const q of P){q.y-=q.v;if(q.y<-.02){q.y=1.02;q.x=Math.random();}const x=(q.x+Math.sin(t+q.p)*.01)*ec.width,y=q.y*ec.height,a=.35+.35*Math.sin(t*3+q.p);ex.fillStyle='rgba(255,'+(120+(q.p*20|0))+',40,'+a+')';ex.beginPath();ex.arc(x,y,q.s,0,7);ex.fill();}}
+ef();
+/* sound: reverb bus + ambience + new stingers */
+const oi=AU.init.bind(AU);AU.init=function(){const had=!!this.c;oi();if(had||!this.c)return;try{const c=this.c,len=c.sampleRate*2.2,b=c.createBuffer(2,len,c.sampleRate);for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);}
+const cv=c.createConvolver();cv.buffer=b;const wet=c.createGain();wet.gain.value=.22;const k=c.createDynamicsCompressor();k.connect(c.destination);cv.connect(wet);wet.connect(k);this.m.connect(cv);
+/* low wind/fire ambience */
+const nb=c.createBuffer(1,c.sampleRate*3,c.sampleRate),nd=nb.getChannelData(0);let l=0;for(let i=0;i<nd.length;i++){l=(l+.02*(Math.random()*2-1))/1.02;nd[i]=l*3.5+(Math.random()<.0008?(Math.random()-.5)*.9:0);}
+const s=c.createBufferSource();s.buffer=nb;s.loop=true;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=700;const g=c.createGain();g.gain.value=.05;s.connect(f);f.connect(g);g.connect(this.m);s.start();this.amb=g;}catch(e){}};
+AU.alert=function(maj){if(maj){this.tone(146,1.1,'sawtooth',.09,0,110);this.tone(220,1.1,'sawtooth',.06,.05,165);this.drum();}else{this.tone(880,.35,'triangle',.08);this.tone(1175,.5,'triangle',.06,.09);}};
+AU.win=function(){[262,330,392,523,659].forEach((f,i)=>this.tone(f,1.6,'triangle',.1,i*.12));this.drum();};
+AU.lose=function(){[196,185,165,131].forEach((f,i)=>this.tone(f,1.4,'sawtooth',.07,i*.28,f*.97));this.tone(55,3,'sine',.3);};
+AU.tick=function(){this.tone(1600,.05,'square',.03);};
+/* hooks */
+const sev=showEv;showEv=function(e){sev(e);try{AU.alert(e.major);const b=$('evb');b.classList[e.major?'add':'remove']('major');b.style.animation='none';void b.offsetWidth;b.style.animation='';}catch(x){}};
+const oend=end;end=function(id){const was=S&&S.over;oend(id);try{if(!was){const e=ENDS[id];(e&&e[1])?AU.win():AU.lose();}}catch(x){}};
+if(typeof setInterval==='function')setInterval(()=>{try{const t=$('evtimer');if(!t||!S||!S.cur)return;const hot=S.cur.left<6;t.classList[hot?'add':'remove']('hot');if(hot&&!S.paused&&AU.c)AU.tick();}catch(x){}},1000);
+})();
 </script></body></html>
